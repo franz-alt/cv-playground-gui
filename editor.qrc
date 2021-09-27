@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/file-svgrepo-com.svg</file>
+        <file>images/hat-and-magic-wand-svgrepo-com.svg</file>
+        <file>images/help-svgrepo-com.svg</file>
+        <file>images/save-svgrepo-com.svg</file>
+        <file>images/settings-svgrepo-com.svg</file>
+        <file>qml/FilterEditor.qml</file>
+        <file>qml/FilterImage.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/Dialogs/AboutDialog.qml</file>
+        <file>qml/Dialogs/BaseDialog.qml</file>
+        <file>qml/Dialogs/MagicDialog.qml</file>
+        <file>qml/Dialogs/SettingsDialog.qml</file>
+        <file>qml/MainMenu/Menu.qml</file>
+        <file>qml/MainMenu/MenuItem.qml</file>
+        <file>qml/MainMenu/MenuSeparator.qml</file>
+        <file>qml/MainMenu/MenuSymbol.qml</file>
+        <file>qml/Themes/Blue.qml</file>
+        <file>qml/Themes/Bright.qml</file>
+        <file>qml/Themes/Dark.qml</file>
+        <file>qml/Themes/Default.qml</file>
+        <file>qml/Themes/qmldir</file>
+        <file>qml/Themes/Theme.qml</file>
+        <file>qml/Themes/theme.js</file>
+    </qresource>
+</RCC>

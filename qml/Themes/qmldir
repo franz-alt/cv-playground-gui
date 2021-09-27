@@ -1,0 +1,5 @@
+module Themes
+
+Dark        1.0 Dark.qml
+Theme       1.0 Theme.qml
+Theme       1.0 theme.js
