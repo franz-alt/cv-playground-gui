@@ -134,7 +134,8 @@ Item
         }
     }
 
-    FileDialog {
+    FileDialog
+    {
         id: fileDialog
         title: qsTr("Select Input")
         nameFilters: [ qsTr("Image files (*.jpg *.png)"), qsTr("All files (*)") ]
