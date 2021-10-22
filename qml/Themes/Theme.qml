@@ -32,4 +32,10 @@ QtObject
     property color dialogButtonTextColor: "black"
     property color dialogButtonBackground: "gray"
     property color dialogButtonHighlighted: "lightgray"
+
+    // filter editor syntax highlighting
+    property color filterEditorSyntaxHighlightingComment: "darkGreen"
+    property color filterEditorSyntaxHighlightingFunction: "darkBlue"
+    property color filterEditorSyntaxHighlightingKeyword: "darkkhaki"
+    property color filterEditorSyntaxHighlightingQuotation: "steelblue"
 }

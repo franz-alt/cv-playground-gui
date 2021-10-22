@@ -23,4 +23,9 @@ Theme
     dialogButtonTextColor: "white"
     dialogButtonBackground: "#a0a0a0"
     dialogButtonHighlighted: "#505050"
+
+    filterEditorSyntaxHighlightingComment: "lightgreen"
+    filterEditorSyntaxHighlightingFunction: "cornflowerblue"
+    filterEditorSyntaxHighlightingKeyword: "darkgoldenrod"
+    filterEditorSyntaxHighlightingQuotation: "dodgerblue"
 }

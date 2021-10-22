@@ -6,9 +6,12 @@
 #include <QGuiApplication>
 #include <QJSValue>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include <QString>
 
+#include "document_handler.hpp"
 #include "filter_image_item.hpp"
+#include "syntax_highlighter.hpp"
 
 const char * MODULE_URI = "com.cvpg.viewer";
 
@@ -36,22 +39,28 @@ int main(int argc, char * argv[])
 
     qmlRegisterSingletonType("AppInfo", 1, 0, "AppInfo", applicationInfo);
     qmlRegisterType<FilterImageItem>(MODULE_URI, 1, 0, "FilterImageItem");
+    qmlRegisterType<DocumentHandler>(MODULE_URI, 1, 0, "DocumentHandler");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
 
-    QObject::connect(&engine,
-                     &QQmlApplicationEngine::objectCreated,
-                     &app,
-                     [url](QObject * obj, QUrl const & objUrl)
-                     {
-                         if (!obj && url == objUrl)
-                         {
-                             QCoreApplication::exit(-1);
-                         }
-                     },
-                     Qt::QueuedConnection);
-                     engine.load(url);
+    QObject::connect(
+        &engine,
+        &QQmlApplicationEngine::objectCreated,
+        &app,
+        [url](QObject * obj, QUrl const & objUrl)
+        {
+            if (!obj && url == objUrl)
+            {
+                QCoreApplication::exit(-1);
+            }
+        },
+        Qt::QueuedConnection
+    );
+
+    DocumentHandler documentHandler;
+    engine.rootContext()->setContextProperty("documentHandler", &documentHandler);
+    engine.load(url);
 
     return app.exec();
 }

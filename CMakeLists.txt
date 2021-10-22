@@ -78,8 +78,10 @@ add_definitions(-DBUILD_TIMESTAMP="${BUILD_TIMESTAMP}" -DCVPG_GUI_VERSION="${CVP
 
 set(PROJECT_SOURCES
     editor.qrc
+    src/document_handler.cpp
     src/filter_image_item.cpp
     src/main.cpp
+    src/syntax_highlighter.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

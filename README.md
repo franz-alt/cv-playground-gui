@@ -8,7 +8,6 @@ Playing with different image processing algorithms and have a direct graphical f
 
 ## Planned
 
-* Syntax highlighting at script input
 * Perform image processing on video streams (via FFmpeg)
 
 ## Screenshots

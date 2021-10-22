@@ -33,7 +33,7 @@ Dialog
 
     background: Rectangle
     {
-        color: mainWindow.theme.dialogWindowBackground
+        color: theme.dialogWindowBackground
     }
 
     header: Item
@@ -84,14 +84,14 @@ Dialog
             font.bold: true
             font.pixelSize: 16
 
-            color: mainWindow.theme.dialogWindowTitleColor
+            color: theme.dialogWindowTitleColor
 
             x: 38
             y: 10
 
             background: Rectangle
             {
-                color: mainWindow.theme.dialogWindowTitleBackground
+                color: theme.dialogWindowTitleBackground
             }
         }
     }
@@ -102,7 +102,7 @@ Dialog
 
         spacing: 5
 
-        background: mainWindow.theme.dialogWindowBackground
+        background: theme.dialogWindowBackground
 
         RoundButton
         {
@@ -119,14 +119,14 @@ Dialog
             contentItem: Text
             {
                 text: okButton.text
-                color: mainWindow.theme.dialogButtonTextColor
+                color: theme.dialogButtonTextColor
                 horizontalAlignment: Text.AlignHCenter
             }
 
             background: Rectangle
             {
-                radius: mainWindow.theme.buttonRoundness
-                color: mainWindow.theme.dialogButtonBackground
+                radius: theme.buttonRoundness
+                color: theme.dialogButtonBackground
             }
 
             MouseArea
@@ -137,18 +137,23 @@ Dialog
 
                 onEntered:
                 {
-                    okButton.contentItem.color = mainWindow.theme.dialogButtonHighlighted;
+                    okButton.contentItem.color = theme.dialogButtonHighlighted;
                 }
 
                 onExited:
                 {
-                    okButton.contentItem.color = mainWindow.theme.dialogButtonTextColor;
+                    okButton.contentItem.color = theme.dialogButtonTextColor;
                 }
 
                 onClicked:
                 {
                     okButton.clicked();
                 }
+            }
+
+            onClicked:
+            {
+                close();
             }
         }
 
@@ -167,14 +172,14 @@ Dialog
             contentItem: Text
             {
                 text: cancelButton.text
-                color: mainWindow.theme.dialogButtonTextColor
+                color: theme.dialogButtonTextColor
                 horizontalAlignment: Text.AlignHCenter
             }
 
             background: Rectangle
             {
-                radius: mainWindow.theme.buttonRoundness
-                color: mainWindow.theme.dialogButtonBackground
+                radius: theme.buttonRoundness
+                color: theme.dialogButtonBackground
             }
 
             MouseArea
@@ -185,12 +190,12 @@ Dialog
 
                 onEntered:
                 {
-                    cancelButton.contentItem.color = mainWindow.theme.dialogButtonHighlighted;
+                    cancelButton.contentItem.color = theme.dialogButtonHighlighted;
                 }
 
                 onExited:
                 {
-                    cancelButton.contentItem.color = mainWindow.theme.dialogButtonTextColor;
+                    cancelButton.contentItem.color = theme.dialogButtonTextColor;
                 }
 
                 onClicked:
@@ -198,7 +203,6 @@ Dialog
                     cancelButton.clicked();
                 }
             }
-
         }
 
         onAccepted:

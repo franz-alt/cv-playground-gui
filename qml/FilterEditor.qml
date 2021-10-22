@@ -7,6 +7,8 @@ import Qt.labs.settings 1.0
 
 import QtQml.Models 2.15
 
+import com.cvpg.viewer 1.0
+
 Item
 {
     id: filterEditor
@@ -19,8 +21,9 @@ Item
     }
 
     property bool showLineNumbers: true
+    property bool enableSyntaxHighlighting: true
 
-    Row
+    Item
     {
         anchors.fill: parent
 
@@ -106,6 +109,8 @@ Item
 
                 placeholderText: qsTr("Enter filter expression")
 
+                text: documentHandler.text
+
                 color: theme.textInputColor
 
                 background: Rectangle
@@ -125,6 +130,26 @@ Item
                     for (var i = 1; i <= lineCount; i++)
                     {
                         lineNumbers.model.append({"number": Number(i).toString()});
+                    }
+                }
+
+                Component.onCompleted:
+                {
+                    documentHandler.setDocument(textArea.textDocument);
+                }
+
+                onVisibleChanged:
+                {
+                    if (visible)
+                    {
+                        // set syntax highlighting colors
+                        documentHandler.setSyntaxHighlightingColor(DocumentHandler.Comment, theme.filterEditorSyntaxHighlightingComment);
+                        documentHandler.setSyntaxHighlightingColor(DocumentHandler.Function, theme.filterEditorSyntaxHighlightingFunction);
+                        documentHandler.setSyntaxHighlightingColor(DocumentHandler.Keyword, theme.filterEditorSyntaxHighlightingKeyword);
+                        documentHandler.setSyntaxHighlightingColor(DocumentHandler.Quotation, theme.filterEditorSyntaxHighlightingQuotation);
+
+                        // set/unset syntax highlighting state
+                        documentHandler.setSyntaxHighlightingState(enableSyntaxHighlighting);
                     }
                 }
 
@@ -243,6 +268,18 @@ Item
                 showLineNumbers = !showLineNumbers;
             }
         }
+
+        MenuItem
+        {
+            text: qsTr("Enable Syntax Highlighting");
+
+            checked: enableSyntaxHighlighting
+
+            onTriggered:
+            {
+                enableSyntaxHighlighting = !enableSyntaxHighlighting;
+            }
+        }
     }
 
     onShowLineNumbersChanged:
@@ -251,10 +288,16 @@ Item
         lineNumbersView.width = showLineNumbers ? 30 : 0;
     }
 
+    onEnableSyntaxHighlightingChanged:
+    {
+        documentHandler.setSyntaxHighlightingState(enableSyntaxHighlighting);
+    }
+
     Settings
     {
         category: "FilterEditor";
 
         property alias showLineNumbersEnabled: filterEditor.showLineNumbers
+        property alias enableSyntaxHighlighting: filterEditor.enableSyntaxHighlighting
     }
 }
