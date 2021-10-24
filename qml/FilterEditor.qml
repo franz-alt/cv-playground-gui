@@ -23,6 +23,9 @@ Item
     property bool showLineNumbers: true
     property bool enableSyntaxHighlighting: true
 
+    property string fontFamily: "Arial"
+    property int fontSize: 10
+
     Item
     {
         anchors.fill: parent
@@ -71,6 +74,9 @@ Item
 
                         width: lineNumbersView.width
 
+                        font.family: fontFamily
+                        font.pixelSize: fontSize
+
                         horizontalAlignment: Text.AlignRight
 
                         color: theme.textInputColor
@@ -110,6 +116,9 @@ Item
                 placeholderText: qsTr("Enter filter expression")
 
                 text: documentHandler.text
+
+                font.family: fontFamily
+                font.pixelSize: fontSize
 
                 color: theme.textInputColor
 
@@ -248,11 +257,6 @@ Item
         }
     }
 
-    Component.onCompleted:
-    {
-        textArea.text = filter;
-    }
-
     Menu
     {
         id: contextMenu
@@ -280,6 +284,106 @@ Item
                 enableSyntaxHighlighting = !enableSyntaxHighlighting;
             }
         }
+
+        MenuSeparator {}
+
+        Menu
+        {
+            id: fontFamilySubMenu
+
+            title: qsTr("Font Family")
+
+            Instantiator
+            {
+                model: Qt.fontFamilies()
+
+                delegate: MenuItem
+                {
+                    text: modelData
+
+                    checkable: true
+                    checked: false
+
+                    onTriggered:
+                    {
+                        fontFamily = modelData;
+
+                        for (var i = 0; i < fontFamilySubMenu.count; ++i)
+                        {
+                            fontFamilySubMenu.itemAt(i).checked = false;
+                        }
+
+                        checked = true;
+                    }
+                }
+
+                onObjectAdded:
+                {
+                    fontFamilySubMenu.insertItem(index, object);
+                }
+
+                onObjectRemoved:
+                {
+                    fontFamilySubMenu.removeItem(object);
+                }
+            }
+        }
+
+        Menu
+        {
+            id: fontSizeSubMenu
+
+            title: qsTr("Font Size")
+
+            Instantiator
+            {
+                model: ListModel
+                {
+                    Component.onCompleted:
+                    {
+                        for (var i = 5; i <= 40; ++i)
+                        {
+                            append({ value: i });
+
+                            if (fontSize === i)
+                            {
+                                fontSizeSubMenu.itemAt(i - 5).checked = true;
+                            }
+                        }
+                    }
+                }
+
+                delegate: MenuItem
+                {
+                    text: modelData
+
+                    checkable: true
+                    checked: false
+
+                    onTriggered:
+                    {
+                        fontSize = modelData;
+
+                        for (var i = 0; i < fontSizeSubMenu.count; ++i)
+                        {
+                            fontSizeSubMenu.itemAt(i).checked = false;
+                        }
+
+                        checked = true;
+                    }
+                }
+
+                onObjectAdded:
+                {
+                    fontSizeSubMenu.insertItem(index, object);
+                }
+
+                onObjectRemoved:
+                {
+                    fontSizeSubMenu.removeItem(object);
+                }
+            }
+        }
     }
 
     onShowLineNumbersChanged:
@@ -299,5 +403,22 @@ Item
 
         property alias showLineNumbersEnabled: filterEditor.showLineNumbers
         property alias enableSyntaxHighlighting: filterEditor.enableSyntaxHighlighting
+        property alias fontFamily: filterEditor.fontFamily
+        property alias fontSize: filterEditor.fontSize
+    }
+
+    Component.onCompleted:
+    {
+        textArea.text = filter;
+
+        // check menu item for persisted font family
+        for (var i = 0; i < fontFamilySubMenu.count; ++i)
+        {
+            if (fontFamilySubMenu.itemAt(i).text === fontFamily)
+            {
+                fontFamilySubMenu.itemAt(i).checked = true;
+                break;
+            }
+        }
     }
 }
