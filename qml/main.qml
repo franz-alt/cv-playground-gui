@@ -102,8 +102,9 @@ Window
         else
         {
             theme = Theme.create(mainWindow, settingsDialog.getThemeName());
-            mainMenu.symbolSize = settingsDialog.getMenuSymbolSize();
         }
+
+        mainMenu.symbolSize = settingsDialog.getMenuSymbolSize();
 
         mainWindow.visible = true;
     }
