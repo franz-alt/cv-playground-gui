@@ -10,6 +10,7 @@
 #include <QString>
 
 #include "document_handler.hpp"
+#include "file_io.hpp"
 #include "filter_image_item.hpp"
 #include "syntax_highlighter.hpp"
 
@@ -60,6 +61,10 @@ int main(int argc, char * argv[])
 
     DocumentHandler documentHandler;
     engine.rootContext()->setContextProperty("documentHandler", &documentHandler);
+
+    FileIo fileIo;
+    engine.rootContext()->setContextProperty("fileIo", &fileIo);
+
     engine.load(url);
 
     return app.exec();

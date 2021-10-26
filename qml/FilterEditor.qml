@@ -3,6 +3,7 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs 1.3
 import Qt.labs.settings 1.0
 
 import QtQml.Models 2.15
@@ -382,6 +383,71 @@ Item
                 {
                     fontSizeSubMenu.removeItem(object);
                 }
+            }
+        }
+
+        MenuSeparator {}
+
+        MenuItem
+        {
+            text: qsTr("Import Filter Script")
+
+            FileDialog
+            {
+                id: fileImportDialog
+
+                title: qsTr("Import filter script to file")
+
+                nameFilters: [ qsTr("cv-playground files (*.pg)"), qsTr("All files (*)") ]
+
+                selectExisting: false
+
+                onSelectionAccepted:
+                {
+                    var url = fileImportDialog.fileUrl.toString();
+                    url = url.replace(/^(file:\/{2})/,"");
+                    url = decodeURIComponent(url);
+
+                    textArea.text = fileIo.read(url);
+                }
+            }
+
+            onTriggered:
+            {
+                fileImportDialog.open();
+            }
+        }
+
+        MenuItem
+        {
+            text: qsTr("Export Filter Script")
+
+            FileDialog
+            {
+                id: fileExportDialog
+
+                title: qsTr("Export filter script to file")
+
+                nameFilters: [ qsTr("cv-playground files (*.pg)"), qsTr("All files (*)") ]
+
+                selectExisting: false
+
+                onSelectionAccepted:
+                {
+                    var url = fileExportDialog.fileUrl.toString();
+                    url = url.replace(/^(file:\/{2})/,"");
+                    url = decodeURIComponent(url);
+
+                    if (!fileIo.write(url, textArea.text))
+                    {
+                        console.log("Error while writing filter to file '" + url + "'.");
+                    }
+                }
+            }
+
+            onTriggered:
+            {
+                fileExportDialog.open();
             }
         }
     }
