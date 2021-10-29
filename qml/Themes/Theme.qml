@@ -27,6 +27,7 @@ QtObject
     property color dialogWindowTitleColor: "black"
     property color dialogWindowTitleBackground: "white"
     property color dialogWindowBackground: "white"
+    property color dialogWindowBorderColor: "dimgrey"
 
     // dialog window buttons
     property color dialogButtonTextColor: "black"

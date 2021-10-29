@@ -12,6 +12,8 @@ BaseDialog
     width: 300
     height: 200
 
+    resizable: false
+
     dialogIcon: "../../images/help-svgrepo-com.svg"
 
     dialogButtons: BaseDialog.DialogButtons.Ok

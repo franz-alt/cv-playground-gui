@@ -21,7 +21,7 @@ BaseDialog
         editor.filter = "";
     }
 
-    onDialogAccepted:
+    onAccepted:
     {
         filter = editor.filterText();
     }

@@ -4,19 +4,28 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Window 2.1
 import QtGraphicalEffects 1.12
 
 import ".."
 import "../Themes"
 
-Dialog
+Item
 {
-    id: dialog
+    id: viewItem
 
     width: 500
     height: 400
 
-    modal: Qt.WindowModal
+    visible: false
+
+    property string title
+
+    property bool resizable: true
+
+    property Item header
+    property Item contentItem
+    property Item footer
 
     property string dialogIcon
 
@@ -28,18 +37,135 @@ Dialog
 
     property int dialogButtons: BaseDialog.DialogButtons.Ok | BaseDialog.DialogButtons.Cancel
 
-    signal dialogAccepted
-    signal dialogRejected
+    signal accepted
+    signal rejected
 
-    background: Rectangle
+    function open()
     {
-        color: theme.dialogWindowBackground
+        visible = true;
+    }
+
+    function close()
+    {
+        visible = false;
+    }
+
+    onContentItemChanged:
+    {
+        if (contentItem !== null)
+        {
+            contentItem.parent = contentData;
+            contentItem.anchors.fill = contentData;
+            contentItem.anchors.margins = 10;
+        }
+    }
+
+    Component.onCompleted:
+    {
+        header.parent = contentHeader;
+        footer.parent = contentFooter;
+    }
+
+    Window
+    {
+        id: window
+
+        title: viewItem.title
+
+        visible: viewItem.visible
+
+        flags: Qt.Dialog | Qt.FramelessWindowHint
+
+        Rectangle
+        {
+            anchors.fill: parent
+
+            color: theme.dialogWindowBackground
+            border.color: theme.dialogWindowBorderColor
+
+            ColumnLayout
+            {
+                anchors.fill: parent
+
+                Item
+                {
+                    id: contentHeader
+
+                    height: 45
+
+                    Layout.fillWidth: true
+                }
+
+                Item
+                {
+                    id: contentData
+
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
+
+                Item
+                {
+                    id: contentFooter
+
+                    height: 55
+
+                    Layout.fillWidth: true
+
+                    activeFocusOnTab: true
+                }
+            }
+        }
+
+        onVisibleChanged:
+        {
+            viewItem.visible = visible;
+        }
+
+        Component.onCompleted:
+        {
+            width = viewItem.width;
+            height = viewItem.height;
+
+            if (!viewItem.resizable)
+            {
+                minimumWidth = width;
+                maximumWidth = width;
+
+                minimumHeight = height;
+                maximumHeight = height;
+            }
+        }
+
+        MouseArea
+        {
+            id : resizearea
+
+            width: 5
+            height: 5
+
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+
+            cursorShape: viewItem.resizable ? Qt.SizeFDiagCursor : Qt.ArrowCursor
+
+            acceptedButtons: Qt.LeftButton
+
+            pressAndHoldInterval: 100
+
+            onPressAndHold:
+            {
+                window.startSystemResize(Qt.BottomEdge | Qt.RightEdge);
+            }
+        }
     }
 
     header: Item
     {
         width: parent.width
         height: 45
+
+        anchors.fill: parent
 
         Rectangle
         {
@@ -79,7 +205,7 @@ Dialog
 
         Label
         {
-            text: dialog.title
+            text: viewItem.title
 
             font.bold: true
             font.pixelSize: 16
@@ -94,15 +220,32 @@ Dialog
                 color: theme.dialogWindowTitleBackground
             }
         }
+
+        MouseArea
+        {
+            anchors.fill: parent
+
+            property real lastMouseX: 0
+            property real lastMouseY: 0
+
+            onPressed:
+            {
+                lastMouseX = mouseX;
+                lastMouseY = mouseY;
+            }
+
+            onMouseXChanged: window.x += (mouseX - lastMouseX)
+            onMouseYChanged: window.y += (mouseY - lastMouseY)
+        }
     }
 
     footer: DialogButtonBox
     {
         alignment: Qt.AlignCenter
 
-        spacing: 5
+        anchors.fill: parent
 
-        background: theme.dialogWindowBackground
+        spacing: 5
 
         RoundButton
         {
@@ -153,7 +296,7 @@ Dialog
 
             onClicked:
             {
-                close();
+                viewItem.close();
             }
         }
 
@@ -203,16 +346,21 @@ Dialog
                     cancelButton.clicked();
                 }
             }
+
+            onClicked:
+            {
+                viewItem.close();
+            }
         }
 
         onAccepted:
         {
-            dialog.dialogAccepted();
+            viewItem.accepted();
         }
 
         onRejected:
         {
-            dialog.dialogRejected();
+            viewItem.rejected();
         }
     }
 }
