@@ -135,6 +135,17 @@ void FilterImageItem::paint(QPainter * painter)
 
 void FilterImageItem::setUrl(QString const & url)
 {
+    if (url.isEmpty())
+    {
+        m_url.clear();
+        emit urlChanged(m_url);
+
+        m_status = NoImage;
+        emit statusChanged(m_status);
+
+        return;
+    }
+
     m_url = std::move(url);
 
     // indicate that we're trying to load given PNG image

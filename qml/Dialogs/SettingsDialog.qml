@@ -14,10 +14,7 @@ BaseDialog
 
     dialogIcon: "../../images/settings-svgrepo-com.svg"
 
-    function isRestorePreviousSessionEnabled()
-    {
-        return restorePreviousSessionCheckBox.checked;
-    }
+    property alias restorePreviousSession: restorePreviousSessionCheckBox.checked
 
     function getThemeName()
     {
@@ -47,9 +44,6 @@ BaseDialog
     contentItem: Flickable
     {
         id: settingsFlickable
-
-        contentWidth: dialog.availableWidth
-        contentHeight: col.implicitHeight
 
         flickableDirection: Qt.Vertical
 
@@ -169,7 +163,6 @@ BaseDialog
     {
         category: "GlobalSettings";
 
-        property alias restorePreviousSession: restorePreviousSessionCheckBox.checked
         property alias blueTheme: blueTheme.checked
         property alias brightTheme: brightTheme.checked
         property alias darkTheme: darkTheme.checked

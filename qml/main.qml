@@ -44,6 +44,11 @@ Window
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
+
+        onUrlChanged:
+        {
+            sessionSettings.imageUrl = url;
+        }
     }
 
     MagicDialog
@@ -55,6 +60,8 @@ Window
         onAccepted:
         {
             filterImage.setFilter(magicDialog.filter);
+
+            sessionSettings.filterExpression = magicDialog.filter;
         }
     }
 
@@ -68,6 +75,8 @@ Window
         {
             theme = Theme.create(mainWindow, settingsDialog.getThemeName());
             mainMenu.symbolSize = settingsDialog.getMenuSymbolSize();
+
+            restorePreviousSession = settingsDialog.restorePreviousSession;
         }
 
         onRejected:
@@ -85,24 +94,7 @@ Window
 
     Component.onCompleted:
     {
-        if (!settingsDialog.isRestorePreviousSessionEnabled())
-        {
-            // set main window into center of the screen with a size of 800x600 pixels
-            mainWindow.width = 800;
-            mainWindow.height = 600;
-            mainWindow.x = Screen.width / 2 - mainWindow.width / 2;
-            mainWindow.y = Screen.height / 2 - mainWindow.height / 2;
-
-            // set bright theme
-            theme = Theme.create(mainWindow, "Default");
-
-            // clear expression string at magic dialog
-            magicDialog.clearFilter();
-        }
-        else
-        {
-            theme = Theme.create(mainWindow, settingsDialog.getThemeName());
-        }
+        theme = Theme.create(mainWindow, settingsDialog.getThemeName());
 
         mainMenu.symbolSize = settingsDialog.getMenuSymbolSize();
 
@@ -111,11 +103,57 @@ Window
 
     Settings
     {
-        category: "MainWindow"
+        id: sessionSettings
 
-        property alias x: mainWindow.x
-        property alias y: mainWindow.y
-        property alias width: mainWindow.width
-        property alias height: mainWindow.height
+        category: "SessionSettings"
+
+        property alias restorePreviousSession: settingsDialog.restorePreviousSession
+
+        property string imageUrl
+
+        property string filterExpression
+
+        property int mainWindowXPos
+        property int mainWindowYPos
+        property int mainWindowWidth
+        property int mainWindowHeight
+
+        Component.onCompleted:
+        {
+            if (restorePreviousSession)
+            {
+                filterImage.setImageUrl(imageUrl);
+
+                magicDialog.setFilter(filterExpression);
+
+                mainWindow.x = mainWindowXPos;
+                mainWindow.y = mainWindowYPos;
+                mainWindow.width = mainWindowWidth;
+                mainWindow.height = mainWindowHeight;
+            }
+            else
+            {
+                // set session related data to default values
+                imageUrl = "";
+
+                magicDialog.clearFilter();
+
+                mainWindow.width = 800;
+                mainWindow.height = 600;
+                mainWindow.x = Screen.width / 2 - mainWindow.width / 2;
+                mainWindow.y = Screen.height / 2 - mainWindow.height / 2;
+            }
+        }
+
+        Component.onDestruction:
+        {
+            if (restorePreviousSession)
+            {
+                mainWindowXPos = mainWindow.x;
+                mainWindowYPos = mainWindow.y;
+                mainWindowWidth = mainWindow.width;
+                mainWindowHeight = mainWindow.height;
+            }
+        }
     }
 }

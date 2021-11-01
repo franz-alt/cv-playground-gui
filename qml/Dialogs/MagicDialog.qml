@@ -3,7 +3,6 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import Qt.labs.settings 1.0
 
 import ".."
 
@@ -14,6 +13,11 @@ BaseDialog
     dialogIcon: "../../images/hat-and-magic-wand-svgrepo-com.svg"
 
     property string filter
+
+    function setFilter(expression)
+    {
+        editor.filter = expression;
+    }
 
     function clearFilter()
     {
@@ -29,12 +33,5 @@ BaseDialog
     contentItem: FilterEditor
     {
         id: editor
-    }
-
-    Settings
-    {
-        category: "MagicSettings";
-
-        property alias expression: editor.filter;
     }
 }
